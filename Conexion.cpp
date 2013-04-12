@@ -6,12 +6,6 @@ using namespace std;
 PGconn *cnn = NULL;
 PGresult *result = NULL;
 
-char servidor[]="sebastian.cl";//Nombre del servidor
-char puerto[]="5432";//Numero del puerto
-char bd[]="iswdb";//Nombre de la base de datos
-char user[]="isw";//Nombre de usuario
-char password[]="isw";//autentificaci�n
-
 class Conexion{
 
  int i;
@@ -20,7 +14,7 @@ class Conexion{
 
  void conectar();
  void consulta(const char *consulta);    
-    
+ void desconectar();   
 
 };
 
@@ -28,8 +22,7 @@ class Conexion{
 
 void Conexion::conectar(){
 
-cnn = PQsetdbLogin(servidor,puerto,NULL,NULL,bd,user,password); 
-
+cnn = PQsetdbLogin("sebastian.cl","5432",NULL,NULL,"iswdb","isw","isw"); // Se crea la conexión con los datos de nuestro servidor
 if (PQstatus(cnn) != CONNECTION_BAD) {
         cout << "Estamos conectados a PostgreSQL!" << endl;
         }
@@ -51,12 +44,13 @@ if (result != NULL) {
             cout << "No. Columnas:" << campos << endl;
 
             cout << "Los nombres de las columnas son:" << endl;
+ 	    cout << "--------------------------------" << endl;
 
             for (i=0; i<campos; i++) {
                 cout << PQfname(result,i) << " | ";
             }
 
-            cout << endl << "Contenido de la tabla" << endl;
+            cout << endl << "--------------------------------" << endl;
 
             for (i=0; i<tuplas; i++) {
                 for (int j=0; j<campos; j++) {
@@ -66,6 +60,13 @@ if (result != NULL) {
             }
         }
 
+}
 
+void Conexion::desconectar(){
+
+   PQclear(result);
+   PQfinish(cnn);
+
+cout<<endl<<"Conexión finalizada..."<<endl;
 
 }
