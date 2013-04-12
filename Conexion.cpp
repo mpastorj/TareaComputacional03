@@ -6,6 +6,12 @@ using namespace std;
 PGconn *cnn = NULL;
 PGresult *result = NULL;
 
+char servidor[]="sebastian.cl";//Nombre del servidor
+char puerto[]="5432";//Numero del puerto
+char bd[]="iswdb";//Nombre de la base de datos
+char user[]="isw";//Nombre de usuario
+char password[]="isw";//autentificación
+
 class Conexion{
 
  int i;
@@ -22,7 +28,8 @@ class Conexion{
 
 void Conexion::conectar(){
 
-cnn = PQsetdbLogin("sebastian.cl","5432",NULL,NULL,"iswdb","isw","isw"); // Se crea la conexiÃ³n con los datos de nuestro servidor
+cnn = PQsetdbLogin(servidor,puerto,NULL,NULL,bd,user,password); 
+
 if (PQstatus(cnn) != CONNECTION_BAD) {
         cout << "Estamos conectados a PostgreSQL!" << endl;
         }
